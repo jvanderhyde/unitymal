@@ -225,8 +225,8 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1810884899374455940}
-        m_TargetAssemblyTypeName: CreateProgramReference, Assembly-CSharp
+      - m_Target: {fileID: 6657144998910759579}
+        m_TargetAssemblyTypeName: DollhouseProgram, Assembly-CSharp
         m_MethodName: OnVRSelect
         m_Mode: 0
         m_Arguments:
