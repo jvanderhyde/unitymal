@@ -4,7 +4,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System;
 using UnityEngine;
 using Mal;
 
@@ -65,7 +64,11 @@ public class SaveLoad : MonoBehaviour
         string worldString = this.Save();
         Debug.Log(worldString);
         PlayerPrefs.SetString("world", worldString);
-        this.defsString = this.GetComponentInChildren<NameShelf>(true).SaveDefs();
+        NameShelf namesInProgram = this.GetComponentInChildren<NameShelf>(true);
+        if (namesInProgram != null)
+            this.defsString = namesInProgram.SaveDefs();
+        else
+            this.defsString = "";
         Debug.Log(defsString);
         PlayerPrefs.SetString("defs",defsString);
     }

@@ -63,15 +63,28 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
         GameObject o = this.programUI.gameObject;
         if (o.activeSelf)
         {
+            //If this program's UI is active, deactivate it.
             o.SetActive(false);
             DollhouseProgram.activeUI = null;
         }
         else
         {
-            if (DollhouseProgram.activeUI != null)
-                DollhouseProgram.activeUI.gameObject.SetActive(false);
-            o.SetActive(true);
-            DollhouseProgram.activeUI = this.programUI;
+            //For a world object, create a program reference. For a program, close any open UI.
+            //Either way, if there's no open UI, open the UI.
+            CreateProgramRefComponent r = this.GetComponent<CreateProgramRefComponent>();
+            if ((r != null) && (DollhouseProgram.activeUI != null))
+            {
+                r.CreateProgramReference(DollhouseProgram.activeUI);
+            }
+            else
+            {          
+                if ((r==null) && (DollhouseProgram.activeUI != null))
+                    DollhouseProgram.activeUI.gameObject.SetActive(false);
+
+                //Open the UI for this object
+                o.SetActive(true);
+                DollhouseProgram.activeUI = this.programUI;
+            }
         }
     }
 

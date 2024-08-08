@@ -143,16 +143,19 @@ namespace Dollhouse
                     DollhouseProgram p = go.GetComponent<DollhouseProgram>();
                     if (p != null)
                     {
-                        types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
-
-                        MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
-                        foreach (types.MalVal codeChild in programData)
+                        if (itemData.containsKey(types.MalKeyword.keyword(":program")))
                         {
-                            types.MalList codeChildData = (types.MalList)codeChild;
-                            float x = ((types.MalNumber)codeChildData.first()).value;
-                            float y = ((types.MalNumber)codeChildData.rest().first()).value;
-                            MalForm item = mp.pr_form(codeChildData.rest().rest().first());
-                            item.transform.localPosition = new Vector3(x, y, 0);
+                            types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
+
+                            MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
+                            foreach (types.MalVal codeChild in programData)
+                            {
+                                types.MalList codeChildData = (types.MalList)codeChild;
+                                float x = ((types.MalNumber)codeChildData.first()).value;
+                                float y = ((types.MalNumber)codeChildData.rest().first()).value;
+                                MalForm item = mp.pr_form(codeChildData.rest().rest().first());
+                                item.transform.localPosition = new Vector3(x, y, 0);
+                            }
                         }
                         p.GetProgramUI().gameObject.SetActive(false);
                     }

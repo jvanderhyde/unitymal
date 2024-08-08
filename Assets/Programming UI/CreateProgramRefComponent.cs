@@ -1,35 +1,26 @@
 //Allows 3D objects in the world to be dragged into the UI
 //Created by James Vanderhyde, 12 November 2021
+//Modified by James Vanderhyde, 8 Auguest 2024
+//  Renamed class (formerly CreateProgramReference) and removed mouse handling.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.XR.Interaction.Toolkit;
 using Mal;
 
-public class CreateProgramReference : MonoBehaviour, IPointerDownHandler
+public class CreateProgramRefComponent : MonoBehaviour
 {
-    void OnMouseDown()
+    public void CreateProgramReference(DollhouseProgramUI programUI)
     {
-        //Find the active programming UI
-        DollhouseProgramUI programUI = DollhouseProgram.GetActiveProgramUI();
         if (programUI != null)
         {
             //Create the Mal form
             MalEntity result;
             result = (MalEntity)programUI.transform.GetComponentInChildren<MalPrinter>().pr_form(new types.MalObjectReference(this.GetComponent<Entity>()));
         }
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        this.OnMouseDown();
-    }
-
-    public void OnVRSelect(SelectEnterEventArgs eventData)
-    {
-        this.OnMouseDown();
+        else
+            throw new NullReferenceException("programUI must not be null");
     }
 
 }
