@@ -19,9 +19,12 @@ namespace Dollhouse
             //create-entity defined at runtime when the gallery is available
             //world defined at runtime when the world entity is available
             ns.Add("remove-entity", new remove_entity());
+            ns.Add("add-component", new add_component());
+            ns.Add("get-component", new get_component());
         }
 
-        private static readonly Dictionary<string, Entity> entityMap = new Dictionary<string, Entity>();
+        private static readonly Dictionary<string, Entity> entityMap = new();
+
         public static Entity GetEntityByGuid(string guid)
         {
             return entityMap[guid];
@@ -140,16 +143,19 @@ namespace Dollhouse
                     DollhouseProgram p = go.GetComponent<DollhouseProgram>();
                     if (p != null)
                     {
-                        types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
-
-                        MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
-                        foreach (types.MalVal codeChild in programData)
+                        if (itemData.containsKey(types.MalKeyword.keyword(":program")))
                         {
-                            types.MalList codeChildData = (types.MalList)codeChild;
-                            float x = ((types.MalNumber)codeChildData.first()).value;
-                            float y = ((types.MalNumber)codeChildData.rest().first()).value;
-                            MalForm item = mp.pr_form(codeChildData.rest().rest().first());
-                            item.transform.localPosition = new Vector3(x, y, 0);
+                            types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
+
+                            MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
+                            foreach (types.MalVal codeChild in programData)
+                            {
+                                types.MalList codeChildData = (types.MalList)codeChild;
+                                float x = ((types.MalNumber)codeChildData.first()).value;
+                                float y = ((types.MalNumber)codeChildData.rest().first()).value;
+                                MalForm item = mp.pr_form(codeChildData.rest().rest().first());
+                                item.transform.localPosition = new Vector3(x, y, 0);
+                            }
                         }
                         p.GetProgramUI().gameObject.SetActive(false);
                     }
@@ -194,5 +200,61 @@ namespace Dollhouse
             }
         }
 
+        private static readonly Dictionary<types.MalVal, Dictionary<Entity,types.MalVal>> components = new();
+
+        private class add_component : types.MalFunc
+        {
+            public override types.MalVal apply(types.MalList arguments)
+            {
+                //Parse the arguments
+                if (arguments.count() < 3)
+                    throw new ArgumentException("add-component requires a map of entity look-up information, a component type, and component data.");
+                if (!(arguments.first() is types.MalMap))
+                    throw new ArgumentException("First argument to add-component must be a map of entity look-up information.");
+                
+                //Pull the guid out of the map
+                types.MalMap mm = arguments.first() as types.MalMap;
+                types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
+                if (!(guid is types.MalString))
+                    throw new ArgumentException("The entity :guid is not a string.");
+                Entity e = entityMap[(guid as types.MalString).value];
+
+                //Add or update the component data
+                types.MalVal componentType = arguments.rest().first();
+                types.MalVal componentData = arguments.rest().rest().first();
+                if (!components.ContainsKey(componentType))
+                {
+                    Dictionary<Entity,types.MalVal> c = new();
+                    components[componentType] = c;
+                }
+                components[componentType][e] = componentData;
+
+                return types.MalNil.malNil;
+            }
+        }
+
+        private class get_component : types.MalFunc
+        {
+            public override types.MalVal apply(types.MalList arguments)
+            {
+                //Parse the arguments
+                if (arguments.count() < 2)
+                    throw new ArgumentException("get-component requires a map of entity look-up information and a component type.");
+                if (!(arguments.first() is types.MalMap))
+                    throw new ArgumentException("First argument to get-component must be a map of entity look-up information.");
+                
+                //Pull the guid out of the map
+                types.MalMap mm = arguments.first() as types.MalMap;
+                types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
+                if (!(guid is types.MalString))
+                    throw new ArgumentException("The entity :guid is not a string.");
+                Entity e = entityMap[(guid as types.MalString).value];
+
+                //get the component data
+                types.MalVal componentType = arguments.rest().first();
+
+                return components[componentType][e];
+            }
+        }
     }
 }

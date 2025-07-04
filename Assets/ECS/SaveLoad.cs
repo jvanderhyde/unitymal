@@ -4,13 +4,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System;
 using UnityEngine;
 using Mal;
 
 public class SaveLoad : MonoBehaviour
 {
-    public List<GameObject> galleryPrefabs = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> galleryPrefabs = new List<GameObject>();
+    private string defsString = "";
 
     void Awake()
     {
@@ -52,6 +53,10 @@ public class SaveLoad : MonoBehaviour
             string worldString = PlayerPrefs.GetString("world");
             this.Load(worldString);
         }
+        if (PlayerPrefs.HasKey("defs"))
+        {
+            this.defsString = PlayerPrefs.GetString("defs");
+        }
     }
 
     private void SaveGame()
@@ -59,6 +64,13 @@ public class SaveLoad : MonoBehaviour
         string worldString = this.Save();
         Debug.Log(worldString);
         PlayerPrefs.SetString("world", worldString);
+        NameShelf namesInProgram = this.GetComponentInChildren<NameShelf>(true);
+        if (namesInProgram != null)
+            this.defsString = namesInProgram.SaveDefs();
+        else
+            this.defsString = "";
+        Debug.Log(defsString);
+        PlayerPrefs.SetString("defs",defsString);
     }
 
     public string Save()
@@ -73,6 +85,11 @@ public class SaveLoad : MonoBehaviour
         }
         sb.Append(")");
         return sb.ToString();
+    }
+
+    public string GetDefs()
+    {
+        return this.defsString;
     }
 
     public void Load(string worldString)
