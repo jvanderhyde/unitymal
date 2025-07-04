@@ -93,8 +93,6 @@ MonoBehaviour:
   m_Name: Standalone
   m_EditorClassIdentifier: 
   features:
-  - {fileID: -2269117144891748124}
-  - {fileID: -8712927755062905603}
   - {fileID: 4963040286616351577}
   - {fileID: -5896081378103918609}
   - {fileID: 4893829345954421791}
@@ -103,6 +101,7 @@ MonoBehaviour:
   - {fileID: -3062037132259489374}
   - {fileID: 2497339995422133549}
   - {fileID: -5941725581135416239}
+  - {fileID: -2269117144891748124}
   - {fileID: -591358774442718085}
   - {fileID: 1507748248788215057}
   - {fileID: 7413458854745118488}
@@ -111,6 +110,7 @@ MonoBehaviour:
   - {fileID: -4578745506998499826}
   - {fileID: 2316775424616146661}
   - {fileID: -5611916350011621528}
+  - {fileID: -8712927755062905603}
   m_renderMode: 1
   m_autoColorSubmissionMode: 1
   m_colorSubmissionModes:
@@ -379,11 +379,11 @@ MonoBehaviour:
   m_Name: XrPerformanceSettingsFeature WebGL
   m_EditorClassIdentifier: 
   m_enabled: 0
-  nameUi: 
-  version: 
-  featureIdInternal: 
-  openxrExtensionStrings: 
-  company: 
+  nameUi: XR Performance Settings
+  version: 1.0.0
+  featureIdInternal: com.unity.openxr.feature.extension.performance_settings
+  openxrExtensionStrings: XR_EXT_performance_settings
+  company: Unity
   priority: 0
   required: 0
 --- !u!114 &-591358774442718085
@@ -522,7 +522,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a1f07dc5afe854f9f12a4194aca3fb, type: 3}
   m_Name: WebGL
   m_EditorClassIdentifier: 
-  features: []
+  features:
+  - {fileID: -663733145766387523}
   m_renderMode: 1
   m_autoColorSubmissionMode: 1
   m_colorSubmissionModes:
@@ -769,8 +770,6 @@ MonoBehaviour:
   m_Name: Android
   m_EditorClassIdentifier: 
   features:
-  - {fileID: -8552978966236991065}
-  - {fileID: 8798942620250044885}
   - {fileID: 3617277723026310808}
   - {fileID: -1987867870875539738}
   - {fileID: 7295941202121913658}
@@ -778,6 +777,7 @@ MonoBehaviour:
   - {fileID: -6255026266968449392}
   - {fileID: 8767334739746706934}
   - {fileID: 349019401604172470}
+  - {fileID: -8552978966236991065}
   - {fileID: -2021607898752010090}
   - {fileID: -7260685905906788054}
   - {fileID: -6147981344224052892}
@@ -785,6 +785,7 @@ MonoBehaviour:
   - {fileID: 6986913836241678661}
   - {fileID: 3233783279568518327}
   - {fileID: -133162006940429527}
+  - {fileID: 8798942620250044885}
   m_renderMode: 1
   m_autoColorSubmissionMode: 1
   m_colorSubmissionModes:
